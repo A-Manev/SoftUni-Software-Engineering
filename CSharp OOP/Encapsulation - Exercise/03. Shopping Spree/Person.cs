@@ -24,7 +24,7 @@ namespace ShoppingSpree
             }
             private set
             {
-                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException("Name cannot be empty");
                 }
@@ -50,27 +50,30 @@ namespace ShoppingSpree
         {
             get
             {
-                return this.products;
+                return this.products.AsReadOnly();
             } 
         }
 
-        public bool BuyProduct(Product product) 
+        public void BuyProduct(Product product) 
         {
             if (this.money >= product.Cost)
             {
                 this.money -= product.Cost;
                 this.products.Add(product);
-                return true;
-            }
 
-            return false;
+                Console.WriteLine($"{this.Name} bought {product.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"{this.Name} can't afford {product.Name}");
+            }
         }
 
         public override string ToString()
         {
             return this.Products.Count > 0
                 ? $"{this.Name} - {string.Join(", ", this.Products)}"
-                : $"{this.Name} - Nothing bought ";
+                : $"{this.Name} - Nothing bought";
         }
     }
 }
