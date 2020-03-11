@@ -1,19 +1,27 @@
-﻿using System;
+﻿using ShoppingSpree.Common;
+using System;
 using System.Collections.Generic;
 
 namespace ShoppingSpree
 {
     public class Person
     {
+        private const decimal MONEY_MIN_VALUE = 0m;
+
         private string name;
         private decimal money;
         private List<Product> products;
 
+        private Person()
+        {
+            this.products = new List<Product>();
+        }
+
         public Person(string name, decimal money)
+            : this()
         {
             this.Name = name;
             this.Money = money;
-            this.products = new List<Product>();
         }
 
         public string Name
@@ -26,7 +34,7 @@ namespace ShoppingSpree
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException("Name cannot be empty");
+                    throw new ArgumentException(GlobalConstants.InvalidNameExceptionMessage);
                 }
 
                 this.name = value;
@@ -37,35 +45,33 @@ namespace ShoppingSpree
         {
             set
             {
-                if (value < 0)
+                if (value < MONEY_MIN_VALUE)
                 {
-                    throw new ArgumentException("Money cannot be negative");
+                    throw new ArgumentException(GlobalConstants.InvalidMoneyExceptionMessage);
                 }
 
                 this.money = value;
             }
         }
 
-        public IReadOnlyCollection<Product> Products 
+        public IReadOnlyCollection<Product> Products
         {
             get
             {
                 return this.products.AsReadOnly();
-            } 
+            }
         }
 
-        public void BuyProduct(Product product) 
+        public void BuyProduct(Product product)
         {
             if (this.money >= product.Cost)
             {
                 this.money -= product.Cost;
                 this.products.Add(product);
-
-                Console.WriteLine($"{this.Name} bought {product.Name}");
             }
             else
             {
-                Console.WriteLine($"{this.Name} can't afford {product.Name}");
+                throw new InvalidOperationException(string.Format(GlobalConstants.InsufficientMoneyExceptionMessage, this.Name, product.Name));
             }
         }
 

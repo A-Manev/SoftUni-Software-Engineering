@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ShoppingSpree.Common;
+using System;
 
 namespace ShoppingSpree
 {
     public class Product
     {
+        private const decimal COST_MIN_VALUE = 0m;
+
         private string name;
         private decimal cost;
 
@@ -23,7 +26,7 @@ namespace ShoppingSpree
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException("Name cannot be empty");
+                    throw new ArgumentException(GlobalConstants.InvalidNameExceptionMessage);
                 }
 
                 this.name = value;
@@ -38,9 +41,9 @@ namespace ShoppingSpree
             }
             private set
             {
-                if (value < 0)
+                if (value < COST_MIN_VALUE)
                 {
-                    throw new ArgumentException("Money cannot be negative");
+                    throw new ArgumentException(GlobalConstants.InvalidMoneyExceptionMessage);
                 }
 
                 this.cost = value;
