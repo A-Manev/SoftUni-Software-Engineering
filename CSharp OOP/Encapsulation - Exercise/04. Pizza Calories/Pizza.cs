@@ -54,11 +54,11 @@ namespace PizzaCalories
         {
             decimal totalCalories = 0;
 
-            totalCalories += this.dough.CaloriesPerGram;
+            totalCalories += this.dough.GetTotalCaloris;
 
             foreach (var topping in toppings)
             {
-                totalCalories += topping.CaloriesPerGram;
+                totalCalories += topping.GetTotalCaloris;
             }
 
             return totalCalories;

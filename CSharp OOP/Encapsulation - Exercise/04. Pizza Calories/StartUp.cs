@@ -10,20 +10,14 @@ namespace PizzaCalories
             try
             {
                 string[] inputPizza = Console.ReadLine()
-                        .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Split(new char[] { ' ' })
                         .ToArray();
-
-                //if (string.IsNullOrEmpty(inputPizza[1]))
-                //{
-                //    throw new ArgumentException("Pizza name should be between 1 and 15 symbols.");
-                //}
-
-                string pizzaName = inputPizza[1];
 
                 string[] doughInput = Console.ReadLine()
                     .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
+                string pizzaName = inputPizza[1];
                 string flourType = doughInput[1];
                 string bakingTechnique = doughInput[2];
                 decimal flourWeight = decimal.Parse(doughInput[3]);
@@ -52,7 +46,6 @@ namespace PizzaCalories
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
-                return; // CARE
             }
         }
     }

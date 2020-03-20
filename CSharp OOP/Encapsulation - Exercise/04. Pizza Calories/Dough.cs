@@ -4,6 +4,9 @@ namespace PizzaCalories
 {
     public class Dough
     {
+        private const decimal BASE_CALORIES_PER_GRAM = 2;
+        private const string INVALID_DOUGH_MESSAGE = "Invalid type of dough.";
+
         private const decimal WhiteFlour = 1.5m;
         private const decimal WholegrainFlour = 1m;
 
@@ -32,7 +35,7 @@ namespace PizzaCalories
             {
                 if (value.ToLower() != "white" && value.ToLower() != "wholegrain")
                 {
-                    throw new ArgumentException("Invalid type of dough.");
+                    throw new ArgumentException(INVALID_DOUGH_MESSAGE);
                 }
 
                 this.flourType = value;
@@ -51,7 +54,7 @@ namespace PizzaCalories
                     && value.ToLower() != "chewy"
                     && value.ToLower() != "homemade")
                 {
-                    throw new ArgumentException("Invalid type of dough.");
+                    throw new ArgumentException(INVALID_DOUGH_MESSAGE);
                 }
 
                 this.bakingTechnique = value;
@@ -75,7 +78,7 @@ namespace PizzaCalories
             }
         }
 
-        public decimal CaloriesPerGram
+        public decimal GetTotalCaloris
         {
             get
             {
@@ -85,7 +88,7 @@ namespace PizzaCalories
 
         private decimal CalculateCalories()
         {
-            return 2 * this.Weight * this.Modifier();
+            return BASE_CALORIES_PER_GRAM * this.Weight * this.Modifier();
         }
 
         private decimal Modifier() // TODO REFACTORING

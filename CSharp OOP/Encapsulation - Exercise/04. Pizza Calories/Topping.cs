@@ -55,7 +55,7 @@ namespace PizzaCalories
             }
         }
 
-        public decimal CaloriesPerGram
+        public decimal GetTotalCaloris
         {
             get
             {

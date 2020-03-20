@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>_04._Pizza_Calories</RootNamespace>
+    <RootNamespace>PizzaCalories</RootNamespace>
   </PropertyGroup>
 
 </Project>
