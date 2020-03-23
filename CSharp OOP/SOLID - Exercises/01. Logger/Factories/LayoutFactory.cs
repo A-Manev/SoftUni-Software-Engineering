@@ -1,27 +1,29 @@
-﻿using Logger.Models.Contracts;
-using Logger.Models.Layouts;
-using System;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+
+using Logger.Models.Contracts;
 
 namespace Logger.Factories
 {
     public class LayoutFactory
     {
-        public ILayout ProduceLayout(string type)
+        public ILayout ProduceLayout(string layoutType)
         {
-            ILayout layout;
+            Assembly assembly = Assembly.GetExecutingAssembly();
 
-            if (type == "SimpleLayout")
-            {
-                layout = new SimpleLayout();
-            }
-            else if (type == "XmlLayout")
-            {
-                layout = new XmlLayout();
-            }
-            else
+            Type type = assembly
+                .GetTypes()
+                .FirstOrDefault(t => t.Name.ToLower() == layoutType.ToLower());
+
+            if (type == null)
             {
                 throw new ArgumentException("Invalid layout type!");
             }
+
+            object[] arguments = new object[] { };
+
+            ILayout layout = (ILayout)Activator.CreateInstance(type, arguments);
 
             return layout;
         }

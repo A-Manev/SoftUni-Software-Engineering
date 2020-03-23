@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
+
 using Logger.Models.Contracts;
+using System.Collections.Generic;
 
 namespace Logger.Models
 {
