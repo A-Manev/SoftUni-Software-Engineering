@@ -31,26 +31,19 @@ namespace Raiding.Core
 
                 string heroType = Console.ReadLine();
 
-                if (heroType == "Druid")
-                {
-                    this.baseHeroes.Add(new Druid(heroName));
-                }
-                else if (heroType == "Paladin")
-                {
-                    this.baseHeroes.Add(new Paladin(heroName));
-                }
-                else if (heroType == "Rogue")
-                {
-                    this.baseHeroes.Add(new Rogue(heroName));
-                }
-                else if (heroType == "Warrior")
-                {
-                    this.baseHeroes.Add(new Warrior(heroName));
-                }
-                else
+                string baseNamespace = "Raiding.Models";
+
+                Type type = Type.GetType($"{baseNamespace}.{heroType}");
+
+                if (type == null)
                 {
                     Console.WriteLine("Invalid hero!");
+                    continue;
                 }
+
+                BaseHero hero = (BaseHero)Activator.CreateInstance(type, heroName);
+
+                this.baseHeroes.Add(hero);
             }
 
             int bossPower = int.Parse(Console.ReadLine());
@@ -60,18 +53,14 @@ namespace Raiding.Core
                 foreach (var hero in this.baseHeroes)
                 {
                     bossPower -= hero.Power;
+
                     Console.WriteLine(hero.CastAbility());
                 }
             }
 
-            if (bossPower > 0)
-            {
-                Console.WriteLine("Defeat...");
-            }
-            else
-            {
-                Console.WriteLine("Victory!");
-            }
+            string finalMessage = bossPower > 0 ? "Defeat..." : "Victory!";
+
+            Console.WriteLine(finalMessage);
         }
     }
 }
