@@ -1,6 +1,8 @@
-﻿namespace Vehicles
+﻿using Vehicles.Models.Contracts;
+
+namespace Vehicles.Models
 {
-    public abstract class Vehicle
+    public abstract class Vehicle : IVehicle
     {
         protected Vehicle(double fuelQuantity, double fuelConsumption)
         {
@@ -8,9 +10,9 @@
             this.FuelConsumption = fuelConsumption;
         }
 
-        private double FuelQuantity { get; set; }
+        public double FuelQuantity { get; private set; }
 
-        private double FuelConsumption { get; set; }
+        public double FuelConsumption { get; private set; }
 
         protected abstract double AdditionalConsumption { get; }
 
