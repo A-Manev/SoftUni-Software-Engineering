@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Vehicles
+namespace Vehicles.Models
 {
     public class Truck : Vehicle
     {
         private const double ADDITIONAL_CONSUMPTION_PER_KM = 1.6;
 
-        public Truck(double fuelQuantity, double fuelConsumption, double tankCapacity) 
+        public Truck(double fuelQuantity, double fuelConsumption, double tankCapacity)
             : base(fuelQuantity, fuelConsumption, tankCapacity)
         {
 

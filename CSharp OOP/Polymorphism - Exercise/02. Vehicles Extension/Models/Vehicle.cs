@@ -1,8 +1,10 @@
 ﻿using System;
 
+using Vehicles.Models.Contracts;
+
 namespace Vehicles
 {
-    public abstract class Vehicle
+    public abstract class Vehicle : IVehicle
     {
         private double fuelQuantity;
         private double fuelConsumption;
@@ -15,7 +17,7 @@ namespace Vehicles
             this.TankCapacity = tankCapacity;
         }
 
-        protected double FuelQuantity
+        public double FuelQuantity
         {
             get
             {
@@ -27,7 +29,7 @@ namespace Vehicles
             }
         }
 
-        private double FuelConsumption
+        public double FuelConsumption
         {
             get
             {
@@ -39,7 +41,7 @@ namespace Vehicles
             }
         }
 
-        protected double TankCapacity
+        public double TankCapacity
         {
             get
             {

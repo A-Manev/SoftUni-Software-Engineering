@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Vehicles
+﻿namespace Vehicles.Models
 {
     public  class Bus : Vehicle
     {
