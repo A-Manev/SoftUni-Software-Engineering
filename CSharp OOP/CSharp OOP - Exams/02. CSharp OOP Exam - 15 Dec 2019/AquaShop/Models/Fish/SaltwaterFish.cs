@@ -4,13 +4,11 @@
     {
         private const int INITIAL_SIZE = 5;
 
-        public SaltwaterFish(string name, string species, decimal price) 
+        public SaltwaterFish(string name, string species, decimal price)
             : base(name, species, price)
         {
-
+            this.Size = INITIAL_SIZE;
         }
-
-        public int Size => INITIAL_SIZE;
 
         public override void Eat()
         {

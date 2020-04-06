@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Text;
     using System.Collections.Generic;
 
     using AquaShop.Utilities.Messages;
@@ -11,8 +12,8 @@
 
     public abstract class Aquarium : IAquarium
     {
+        private List<IFish> fishes;
         private List<IDecoration> decorations;
-        private List<IFish> fish;
 
         private string name;
 
@@ -21,8 +22,8 @@
             this.Name = name;
             this.Capacity = capacity;
 
+            this.fishes = new List<IFish>();
             this.decorations = new List<IDecoration>();
-            this.fish = new List<IFish>();
         }
 
         public string Name
@@ -45,28 +46,28 @@
 
         public ICollection<IDecoration> Decorations => this.decorations;
 
-        public ICollection<IFish> Fish => this.fish;
+        public ICollection<IFish> Fish => this.fishes;
 
         public void AddFish(IFish fish)
         {
-            if (this.Capacity - fish.Size < 0)
+            if (this.fishes.Count == this.Capacity)
             {
                 throw new InvalidOperationException(ExceptionMessages.NotEnoughCapacity);
             }
 
-            this.fish.Add(fish);
+            this.fishes.Add(fish);
         }
 
         public bool RemoveFish(IFish fish)
         {
-            IFish fishToRemove = this.fish.FirstOrDefault(x => x.Name == fish.Name);
+            IFish fishToRemove = this.fishes.FirstOrDefault(x => x.Name == fish.Name);
 
             if (fishToRemove == null)
             {
                 return false;
             }
 
-            this.fish.Remove(fish);
+            this.fishes.Remove(fish);
 
             return true;
         }
@@ -78,12 +79,27 @@
 
         public void Feed()
         {
-            foreach (var currentFish in this.fish)
+            foreach (var currentFish in this.fishes)
             {
                 currentFish.Eat();
             }
         }
 
-        public abstract string GetInfo();
+        public string GetInfo()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine($"{this.Name} ({this.GetType().Name}):");
+
+            string fish = this.Fish.Any()
+                ? $"Fish: {string.Join(", ", this.Fish.Select(f => f.Name))}"
+                : $"Fish: none";
+
+            stringBuilder.AppendLine(fish);
+            stringBuilder.AppendLine($"Decorations: {this.Decorations.Count}");
+            stringBuilder.AppendLine($"Comfort: {this.Comfort}");
+
+            return stringBuilder.ToString().TrimEnd();
+        }
     }
 }

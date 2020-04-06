@@ -28,50 +28,46 @@
 
         public string AddAquarium(string aquariumType, string aquariumName)
         {
+            IAquarium aquarium;
+
             if (aquariumType == "FreshwaterAquarium")
             {
-                IAquarium aquarium = new FreshwaterAquarium(aquariumName);
-
-                this.aquariums.Add(aquarium);
-
-                return $"Successfully added {aquariumType}.";
+                aquarium = new FreshwaterAquarium(aquariumName);
             }
             else if (aquariumType == "SaltwaterAquarium")
             {
-                IAquarium aquarium = new SaltwaterAquarium(aquariumName);
-
-                this.aquariums.Add(aquarium);
-
-                return $"Successfully added {aquariumType}.";
+                aquarium = new SaltwaterAquarium(aquariumName);
             }
             else
             {
                 throw new InvalidOperationException(ExceptionMessages.InvalidAquariumType);
             }
+
+            this.aquariums.Add(aquarium);
+
+            return string.Format(OutputMessages.SuccessfullyAdded, aquarium.GetType().Name);
         }
 
         public string AddDecoration(string decorationType)
         {
+            IDecoration decoration;
+
             if (decorationType == "Ornament")
             {
-                Ornament ornament = new Ornament();
-
-                this.decorations.Add(ornament);
-
-                return $"Successfully added {decorationType}.";
+                decoration = new Ornament();
             }
             else if (decorationType == "Plant")
             {
-                Plant plant = new Plant();
-
-                this.decorations.Add(plant);
-
-                return $"Successfully added {decorationType}.";
+                decoration = new Plant();
             }
             else
             {
                 throw new InvalidOperationException(ExceptionMessages.InvalidDecorationType);
             }
+
+            this.decorations.Add(decoration);
+
+            return string.Format(OutputMessages.SuccessfullyAdded, decoration.GetType().Name);
         }
 
         public string InsertDecoration(string aquariumName, string decorationType)
@@ -80,13 +76,13 @@
 
             if (decoration != null)
             {
-                var aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName); // care does aquarium exist 
+                var aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
 
                 aquarium.Decorations.Add(decoration);
 
                 this.decorations.Remove(decoration);
 
-                return $"Successfully added {decorationType} to {aquariumName}.";
+                return string.Format(OutputMessages.EntityAddedToAquarium, decoration.GetType().Name, aquarium.Name);
             }
             else
             {
@@ -96,55 +92,49 @@
 
         public string AddFish(string aquariumName, string fishType, string fishName, string fishSpecies, decimal price)
         {
+            IFish fish;
+
             if (fishType == "FreshwaterFish")
             {
-                IAquarium aquarium = this.aquariums.FirstOrDefault(x => x.Name == aquariumName);
-
-                if (aquarium.GetType().Name != "FreshwaterAquarium")
-                {
-                    return "Water not suitable.";
-                }
-                else
-                {
-                    IFish freshwaterFish = new FreshwaterFish(fishName, fishSpecies, price);
-
-                    aquarium.Fish.Add(freshwaterFish);
-
-                    return $"Successfully added {fishType} to {aquariumName}.";
-                }
+                fish = new FreshwaterFish(fishName, fishSpecies, price);
             }
             else if (fishType == "SaltwaterFish")
             {
-                IAquarium aquarium = this.aquariums.FirstOrDefault(x => x.Name == aquariumName);
-
-                if (aquarium.GetType().Name != "SaltwaterAquarium")
-                {
-                    return "Water not suitable.";
-                }
-                else
-                {
-                    IFish SaltwaterFish = new SaltwaterFish(fishName, fishSpecies, price);
-
-                    aquarium.Fish.Add(SaltwaterFish);
-
-                    return $"Successfully added {fishType} to {aquariumName}.";
-                }
+                fish = new SaltwaterFish(fishName, fishSpecies, price);
             }
             else
             {
                 throw new InvalidOperationException(ExceptionMessages.InvalidFishType);
             }
+
+            IAquarium currentAquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
+
+            string aquariumType = currentAquarium.GetType().Name;
+
+            bool isTheRightAquariumForTheRightFish =
+                fishType == "FreshwaterFish" && aquariumType == "FreshwaterAquarium" ||
+                fishType == "SaltwaterFish" && aquariumType == "SaltwaterAquarium";
+
+            if (isTheRightAquariumForTheRightFish)
+            {
+                currentAquarium.AddFish(fish);
+                return string.Format(OutputMessages.EntityAddedToAquarium, fish.GetType().Name, currentAquarium.Name);
+            }
+            else
+            {
+                return OutputMessages.UnsuitableWater;
+            }
         }
 
         public string FeedFish(string aquariumName)
         {
-            int fedCount = 0; 
+            int fedCount = 0;
 
             foreach (var aquarium in this.aquariums)
             {
                 if (aquarium.Name == aquariumName)
                 {
-                    foreach (var fish in aquarium.Fish) // care
+                    foreach (var fish in aquarium.Fish) 
                     {
                         fish.Eat();
                         fedCount++;
@@ -152,27 +142,21 @@
                 }
             }
 
-            return $"Fish fed: {fedCount}";
+            return string.Format(OutputMessages.FishFed, fedCount);
         }
 
         public string CalculateValue(string aquariumName)
         {
-            decimal value = 0;
-
             IAquarium aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
 
-            foreach (var fish in aquarium.Fish)
-            {
-                value += fish.Price;
-            }
+            decimal fishPrice = aquarium.Fish.Select(f => f.Price).Sum();
+            decimal decorationPrice = aquarium.Decorations.Select(d => d.Price).Sum();
 
-            foreach (var decoration in aquarium.Decorations)
-            {
-                value += decoration.Price;
-            }
+            decimal totalPrice = fishPrice + decorationPrice;
 
-            return $"The value of Aquarium {aquariumName} is {value:F2}.";
+            return string.Format(OutputMessages.AquariumValue, aquarium.Name, $"{totalPrice:F2}");
         }
+
         public string Report()
         {
             StringBuilder stringBuilder = new StringBuilder();

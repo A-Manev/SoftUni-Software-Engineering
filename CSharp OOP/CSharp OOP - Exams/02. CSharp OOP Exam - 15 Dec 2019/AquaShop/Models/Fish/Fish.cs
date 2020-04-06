@@ -41,6 +41,7 @@
                 {
                     throw new ArgumentException(ExceptionMessages.InvalidFishSpecies);
                 }
+
                 this.species = value;
             }
         }
@@ -57,9 +58,9 @@
 
                 this.price = value;
             }
-        } // Care 
+        } 
 
-        public virtual int Size { get; protected set; } // Care 
+        public virtual int Size { get; protected set; }
 
         public abstract void Eat();
     }
