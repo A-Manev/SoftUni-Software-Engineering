@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\source\repos\PetStore\PetStore.Models\PetStore.Models.csproj" />
+    <ProjectReference Include="..\PerStore.Services\PetStore.Services.csproj" />
+  </ItemGroup>
+
+</Project>
